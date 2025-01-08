@@ -1,8 +1,9 @@
 import { WS_OP_HEARTBEAT_REPLY, WS_OP_CONNECT_SUCCESS } from "./constant";
 import { getDanmakuServer } from "./api";
 import { createPacket, parsePacket } from "./protocol";
+import type { BiliMessage, KnownBiliMessage } from "./types";
 
-const roomId = 35298;
+const roomId = 1852504554;
 
 const { host, port, token } = await getDanmakuServer(roomId);
 console.error("Connecting to", host, port, token);
@@ -45,10 +46,19 @@ ws.addEventListener("message", async (event) => {
       return;
     }
 
+    console.log(packet.body);
+
     try {
-      console.log(packet.body);
+      const message = JSON.parse(packet.body) as KnownBiliMessage;
+      if (message.cmd === "DANMU_MSG") {
+        const sender = message.info[2][1];
+        const content = message.info[1];
+        const uid = message.info[2][0];
+        const timestamp = message.info[9].ts;
+        console.error(`[${new Date(timestamp * 1000).toISOString()}] ${sender} (${uid}): ${content}`);
+      }
     } catch (error) {
-      console.error("Failed to parse packet:", error);
+      console.error("Failed to parse packet:", packet.body);
     }
   }
 });

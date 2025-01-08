@@ -19,16 +19,9 @@ import {
   WS_SEQUENCE_OFFSET,
   WS_VERSION_OFFSET,
 } from "./constant";
+import type { BiliHeader, BiliPacket } from "./types";
 
 const brotliDecompress = promisify(rawBrotliDecompress);
-
-interface BiliHeader {
-  packetLength: number;
-  headerLength: number;
-  protocolVersion: number;
-  operation: number;
-  sequenceId: number;
-}
 
 export const createPacket = (header: Partial<BiliHeader>, body: string) => {
   const encoder = new TextEncoder();
@@ -61,11 +54,6 @@ export const createPacket = (header: Partial<BiliHeader>, body: string) => {
     ...new Uint8Array(bodyBuffer),
   ]).buffer;
 };
-
-interface BiliPacket {
-  header: BiliHeader;
-  body: string;
-}
 
 export const parsePacket = async (
   buffer: ArrayBufferLike
@@ -102,7 +90,9 @@ export const parsePacket = async (
       break;
     }
 
-    const rawBody = new Uint8Array(buffer.slice(offset + header.headerLength, endOfPacket));
+    const rawBody = new Uint8Array(
+      buffer.slice(offset + header.headerLength, endOfPacket)
+    );
     if (header.protocolVersion === WS_BODY_PROTOCOL_VERSION_BROTLI) {
       const { buffer, byteOffset, byteLength } = await brotliDecompress(
         rawBody
