@@ -15,5 +15,9 @@
     "consola": "^3.3.3",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.3"
+  },
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch run src/index.ts"
   }
 }

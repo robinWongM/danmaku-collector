@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  danmaku-collector:
+    build: .
+    volumes:
+      - ./.env:/app/.env
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
