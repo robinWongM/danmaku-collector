@@ -1,4 +1,4 @@
-FROM oven/bun:1 as builder
+FROM oven/bun:1-slim
 WORKDIR /app
 
 # Copy root package files
@@ -10,14 +10,8 @@ COPY packages/processor/package.json ./packages/processor/
 
 RUN bun install --frozen-lockfile
 
-COPY . .
-RUN cd packages/receiver && bun run build
-
-FROM oven/bun:1-slim
-WORKDIR /app
-
-COPY --from=builder /app/packages/receiver/dist ./dist
-COPY --from=builder /app/packages/receiver/package.json ./
+# Copy source files
+COPY packages/receiver/src ./packages/receiver/src
 
 ENV NODE_ENV=production
-CMD ["bun", "dist/index.js"] 
+CMD ["bun", "run", "--cwd", "packages/receiver", "start"] 
