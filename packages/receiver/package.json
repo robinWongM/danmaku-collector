@@ -7,6 +7,7 @@
     "start": "bun run src/index.ts"
   },
   "dependencies": {
+    "@danmaku-collector/common": "workspace:*",
     "consola": "^3.0.0",
     "rabbitmq-client": "^5.0.2"
   }

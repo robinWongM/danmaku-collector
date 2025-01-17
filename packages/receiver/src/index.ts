@@ -3,10 +3,9 @@ import { Connection } from 'rabbitmq-client';
 import { getDanmakuServer } from "./api";
 import { createPacket, parsePacket } from "./protocol";
 import { WS_OP_HEARTBEAT_REPLY, WS_OP_CONNECT_SUCCESS } from "./constant";
+import { EXCHANGE_NAME, QUEUE_NAME, createBaseConfig } from "@danmaku-collector/common";
 
 const RABBITMQ_URL = process.env.RABBITMQ_URL || 'amqp://localhost';
-const QUEUE_NAME = 'danmaku_messages';
-const EXCHANGE_NAME = 'danmaku-events';
 
 // Initialize RabbitMQ connection
 const rabbit = new Connection(RABBITMQ_URL);
@@ -21,10 +20,7 @@ rabbit.on('connection', () => {
 const publisher = rabbit.createPublisher({
   confirm: true,
   maxAttempts: 2,
-  exchanges: [{
-    exchange: EXCHANGE_NAME,
-    type: 'direct'
-  }]
+  ...createBaseConfig(),
 });
 
 export const collectDanmaku = async (roomId: number) => {

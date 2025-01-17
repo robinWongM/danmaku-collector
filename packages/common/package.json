@@ -1,0 +1,13 @@
+{
+  "name": "@danmaku-collector/common",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "rabbitmq-client": "^5.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+} 

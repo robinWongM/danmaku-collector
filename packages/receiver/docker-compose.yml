@@ -11,7 +11,8 @@ services:
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     restart: unless-stopped
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     logging:
       driver: "json-file"
       options:
@@ -19,7 +20,8 @@ services:
         max-file: "3"
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:4-management
+    hostname: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -27,7 +29,13 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+      - ./data/mq:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
 volumes:
   rabbitmq_data: 
