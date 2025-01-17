@@ -131,3 +131,6 @@ dist
 
 # Databases
 *.db
+
+# VitePress
+docs/.vitepress/cache

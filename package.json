@@ -1,23 +1,12 @@
 {
   "name": "danmaku-collector",
-  "module": "index.ts",
-  "type": "module",
-  "devDependencies": {
-    "@libsql/client": "^0.14.0",
-    "@types/bun": "^1.1.16",
-    "@types/node": "^22.10.5",
-    "drizzle-kit": "^0.30.1"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "consola": "^3.3.3",
-    "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.38.3"
-  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "start": "bun run src/index.ts",
-    "dev": "bun --watch run src/index.ts"
-  }
+    "start:receiver": "bun run --cwd packages/receiver start",
+    "start:processor": "bun run --cwd packages/processor start"
+  },
+  "type": "module"
 }

@@ -1,13 +1,15 @@
 version: '3.8'
 
 services:
-  danmaku-collector:
-    image: ghcr.hmr.sh/robinwongm/danmaku-collector:latest
+  processor:
+    image: ghcr.hmr.sh/robinwongm/danmaku-collector:latest-processor
     volumes:
       - ./.env:/app/.env
       - ./data:/app/data
     environment:
       - NODE_ENV=production
+      - SERVICE_TYPE=processor
+      - RABBITMQ_CONFIGS=[{"url":"amqp://guest:guest@machine-a:5672","name":"receiver-1"}]
     restart: unless-stopped
     logging:
       driver: "json-file"

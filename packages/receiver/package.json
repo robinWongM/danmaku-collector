@@ -1,0 +1,14 @@
+{
+  "name": "@danmaku-collector/receiver",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "consola": "^3.0.0",
+    "rabbitmq-client": "^5.0.2"
+  }
+}

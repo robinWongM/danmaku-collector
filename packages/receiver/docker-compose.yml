@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  receiver:
+    image: ghcr.hmr.sh/robinwongm/danmaku-collector:latest-receiver
+    volumes:
+      - ./.env:/app/.env
+    environment:
+      - NODE_ENV=production
+      - SERVICE_TYPE=receiver
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq_data: 
